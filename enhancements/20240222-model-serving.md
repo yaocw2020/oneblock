@@ -84,72 +84,73 @@ metadata:
   name: mistral-7b-instruct-v1
   namespace: default
 spec:
-	deployment_config:
-		# This corresponds to Ray Serve settings, as generated with
-		# `serve build`.
-		autoscaling_config:
-			min_replicas: 1
-			initial_replicas: 1
-			max_replicas: 1
-			target_num_ongoing_requests_per_replica: 24
-			metrics_interval_s: 10.0
-			look_back_period_s: 30.0
-			smoothing_factor: 0.5
-			downscale_delay_s: 300.0
-			upscale_delay_s: 90.0
-		max_concurrent_queries: 64
-		ray_actor_options:
-			# Resources assigned to each model deployment. The deployment will be
-			# initialized first, and then start prediction workers which actually hold the model.
-			resources:
-				accelerator_type:<GPU_type>: 0.01 # auto configured by MLServe's mlClusterRef
-				# accelerator_type_cpu: 0.01
-	engine_config:
-		# Model id - this is a RayLLM id
-		model_id: "mistralai/Mistral-7B-Instruct-v0.2"
-		# Id of the model on Hugging Face Hub. Can also be a disk path. Defaults to model_id if not specified.
-		hf_model_id: "mistralai/Mistral-7B-Instruct-v0.2"
-		type: VLLMEngine # TRTLLMEngine VLLMEngine
-		# LLM engine keyword arguments passed when constructing the model.
-		engine_kwargs:
-			trust_remote_code: true
-			max_num_batched_tokens: 2048
-			max_num_seqs: 64
-			gpu_memory_utilization: 0.9
-			# dtype: half
-		max_total_tokens: 2048
-		# Optional Ray Runtime Environment configuration. See Ray documentation for more details.
-		# Add dependent libraries, environment variables, etc.
-		runtime_env:
-			# env_vars:
-				# YOUR_ENV_VAR: "your_value"
-		# Optional configuration for loading the model from S3 instead of Hugging Face Hub. You can use this to speed up downloads or load models not on Hugging Face Hub.
-		# s3_mirror_config:
-		#   bucket_uri: s3://large-dl-models-mirror/models/
-		generation:
-			# Format to convert user API input into prompts to feed into the LLM engine. {instruction} refers to user-supplied input.
-			prompt_format:
-				system: "{instruction}\n"  # System message. Will default to default_system_message
-				assistant: "### Response:\n{instruction}\n"  # Past assistant message. Used in chat completions API.
-				trailing_assistant: "### Response:\n"  # New assistant message. After this point, model will generate tokens.
-				user: "### Instruction:\n{instruction}\n"  # User message.
-				default_system_message: "Below is an instruction that describes a task. Write a response that appropriately completes the request."  # Default system message.
-				system_in_user: false  # Whether the system prompt is inside the user prompt. If true, the user field should include '{system}'
-				add_system_tags_even_if_message_is_empty: false  # Whether to include the system tags even if the user message is empty.
-				strip_whitespace: false  # Whether to automaticall strip whitespace from left and right of user supplied messages for chat completions
-			# Stopping sequences. The generation will stop when it encounters any of the sequences, or the tokenizer EOS token.
-			# Those can be strings, integers (token ids) or lists of integers.
-			# Stopping sequences supplied by the user in a request will be appended to this.
-			stopping_sequences: ["### Response:", "### End"]
-	# Resources assigned to each model replica. This corresponds to Ray AIR ScalingConfig.
-	scaling_config:
-		# If using multiple GPUs set num_gpus_per_worker to be 1 and then set num_workers to be the number of GPUs you want to use.
-		num_workers: 1
-		num_gpus_per_worker: 1
-		num_cpus_per_worker: 2
-		placement_strategy: "STRICT_PACK"
-		resources_per_worker:
-			accelerator_type:<GPU_type>: 0.01 # auto configured by MLServe's mlClusterRef
+  deployment_config:
+  # This corresponds to Ray Serve settings, as generated with
+  # `serve build`.
+  autoscaling_config:
+    min_replicas: 1
+    initial_replicas: 1
+    max_replicas: 1
+    target_num_ongoing_requests_per_replica: 24
+    metrics_interval_s: 10.0
+    look_back_period_s: 30.0
+    smoothing_factor: 0.5
+    downscale_delay_s: 300.0
+    upscale_delay_s: 90.0
+  max_concurrent_queries: 64
+  ray_actor_options:
+    # Resources assigned to each model deployment. The deployment will be
+    # initialized first, and then start prediction workers which actually hold the model.
+    resources:
+      accelerator_type:<GPU_type>: 0.01 # auto configured by MLServe's mlClusterRef
+      # accelerator_type_cpu: 0.01
+  engine_config:
+    # Model id - this is a RayLLM id
+    model_id: "mistralai/Mistral-7B-Instruct-v0.2"
+    # Id of the model on Hugging Face Hub. Can also be a disk path. Defaults to model_id if not specified.
+    hf_model_id: "mistralai/Mistral-7B-Instruct-v0.2"
+    type: VLLMEngine # TRTLLMEngine VLLMEngine
+    # LLM engine keyword arguments passed when constructing the model.
+    engine_kwargs:
+      trust_remote_code: true
+      max_num_batched_tokens: 2048
+      max_num_seqs: 64
+      gpu_memory_utilization: 0.9
+      # dtype: half
+    max_total_tokens: 2048
+    # Optional Ray Runtime Environment configuration. See Ray documentation for more details.
+    # Add dependent libraries, environment variables, etc.
+    runtime_env:
+    # env_vars:
+    # YOUR_ENV_VAR: "your_value"
+    # Optional configuration for loading the model from S3 instead of Hugging Face Hub. You can use this to speed up downloads or load models not on Hugging Face Hub.
+    # s3_mirror_config:
+    #   bucket_uri: s3://large-dl-models-mirror/models/
+    generation:
+      # Format to convert user API input into prompts to feed into the LLM engine. {instruction} refers to user-supplied input.
+      prompt_format:
+        system: "{instruction}\n"  # System message. Will default to default_system_message
+        assistant: "### Response:\n{instruction}\n"  # Past assistant message. Used in chat completions API.
+        trailing_assistant: "### Response:\n"  # New assistant message. After this point, model will generate tokens.
+        user: "### Instruction:\n{instruction}\n"  # User message.
+        default_system_message: "Below is an instruction that describes a task. Write a response that appropriately completes the request."  # Default system message.
+        system_in_user: false  # Whether the system prompt is inside the user prompt. If true, the user field should include '{system}'
+        add_system_tags_even_if_message_is_empty: false  # Whether to include the system tags even if the user message is empty.
+        strip_whitespace: false  # Whether to automaticall strip whitespace from left and right of user supplied messages for chat completions
+      # Stopping sequences. The generation will stop when it encounters any of the sequences, or the tokenizer EOS token.
+      # Those can be strings, integers (token ids) or lists of integers.
+      # Stopping sequences supplied by the user in a request will be appended to this.
+      stopping_sequences: ["### Response:", "### End"]
+  # Resources assigned to each model replica. This corresponds to Ray AIR ScalingConfig.
+  scaling_config:
+    # If using multiple GPUs set num_gpus_per_worker to be 1 and then set num_workers to be the number of GPUs you want to use.
+    num_workers: 1
+    num_gpus_per_worker: 1
+    num_cpus_per_worker: 2
+    placement_strategy: "STRICT_PACK"
+    resources_per_worker:
+      accelerator_type:<GPU_type>: 0.01 # auto configured by MLServe's mlClusterRef
+
 ```
 
 ### API changes
