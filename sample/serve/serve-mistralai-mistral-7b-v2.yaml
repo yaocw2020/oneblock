@@ -1,0 +1,16 @@
+apiVersion: ml.oneblock.ai/v1alpha1
+kind: MLServe
+metadata:
+  name: falcon-7b-llm
+  namespace: default
+spec:
+  applications:
+  - name: falcon-7b-llm
+    route_prefix: /
+    import_path: rayllm.backend:router_application
+  modelRef:
+    name: falcon-7b-instruct
+    namespace: default
+  mlClusterRef: # use existing or create a new ray cluster
+    name: default
+    namespace: oneblock-public
