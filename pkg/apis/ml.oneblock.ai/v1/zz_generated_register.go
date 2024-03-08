@@ -28,8 +28,10 @@ import (
 )
 
 var (
-	DatasetResourceName  = "datasets"
-	NotebookResourceName = "notebooks"
+	DatasetResourceName              = "datasets"
+	ModelTemplateResourceName        = "modeltemplates"
+	ModelTemplateVersionResourceName = "modeltemplateversions"
+	NotebookResourceName             = "notebooks"
 )
 
 // SchemeGroupVersion is group version used to register these objects
@@ -55,6 +57,10 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 	scheme.AddKnownTypes(SchemeGroupVersion,
 		&Dataset{},
 		&DatasetList{},
+		&ModelTemplate{},
+		&ModelTemplateList{},
+		&ModelTemplateVersion{},
+		&ModelTemplateVersionList{},
 		&Notebook{},
 		&NotebookList{},
 	)

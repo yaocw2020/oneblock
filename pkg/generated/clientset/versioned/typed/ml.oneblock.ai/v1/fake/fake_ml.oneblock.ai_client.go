@@ -32,6 +32,14 @@ func (c *FakeMlV1) Datasets(namespace string) v1.DatasetInterface {
 	return &FakeDatasets{c, namespace}
 }
 
+func (c *FakeMlV1) ModelTemplates(namespace string) v1.ModelTemplateInterface {
+	return &FakeModelTemplates{c, namespace}
+}
+
+func (c *FakeMlV1) ModelTemplateVersions(namespace string) v1.ModelTemplateVersionInterface {
+	return &FakeModelTemplateVersions{c, namespace}
+}
+
 func (c *FakeMlV1) Notebooks(namespace string) v1.NotebookInterface {
 	return &FakeNotebooks{c, namespace}
 }

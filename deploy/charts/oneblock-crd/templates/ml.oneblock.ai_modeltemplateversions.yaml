@@ -1,0 +1,204 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    {}
+  name: modeltemplateversions.ml.oneblock.ai
+spec:
+  group: ml.oneblock.ai
+  names:
+    kind: ModelTemplateVersion
+    listKind: ModelTemplateVersionList
+    plural: modeltemplateversions
+    shortNames:
+    - mtv
+    - mtvs
+    singular: modeltemplateversion
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .spec.templatedId
+      name: TEMPLATE_ID
+      type: string
+    - jsonPath: .spec.description
+      name: DESCRIPTION
+      type: string
+    - jsonPath: .status.version
+      name: VERSION
+      type: integer
+    - jsonPath: .metadata.creationTimestamp
+      name: AGE
+      type: date
+    name: v1
+    schema:
+      openAPIV3Schema:
+        description: ModelTemplateVersion is the Schema for the LLM template version
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              deployment_config:
+                properties:
+                  auto_scaling_config:
+                    properties:
+                      downscale_delay_s:
+                        type: number
+                      initial_replicas:
+                        type: integer
+                      look_back_period_s:
+                        type: number
+                      max_replicas:
+                        type: integer
+                      metrics_interval_s:
+                        type: number
+                      min_replicas:
+                        type: integer
+                      smoothing_factor:
+                        type: number
+                      target_num_ongoing_requests_per_replica:
+                        type: number
+                      upscale_delay_s:
+                        type: number
+                    required:
+                    - downscale_delay_s
+                    - initial_replicas
+                    - look_back_period_s
+                    - max_replicas
+                    - metrics_interval_s
+                    - min_replicas
+                    - smoothing_factor
+                    - target_num_ongoing_requests_per_replica
+                    - upscale_delay_s
+                    type: object
+                  max_concurrent_queries:
+                    type: integer
+                  ray_actor_options:
+                    properties:
+                      resources:
+                        type: object
+                    required:
+                    - resources
+                    type: object
+                type: object
+              description:
+                type: string
+              engine_config:
+                properties:
+                  engine_kwargs:
+                    properties:
+                      gpu_memory_utilization:
+                        type: number
+                      max_num_batched_tokens:
+                        type: integer
+                      max_num_seqs:
+                        type: integer
+                      trust_remote_code:
+                        type: boolean
+                    required:
+                    - trust_remote_code
+                    type: object
+                  generation:
+                    properties:
+                      prompt_format:
+                        properties:
+                          assistant:
+                            type: string
+                          default_system_message:
+                            type: string
+                          system:
+                            type: string
+                          system_in_user:
+                            type: boolean
+                          trailing_assistant:
+                            type: string
+                          user:
+                            type: string
+                        type: object
+                      stopping_sequences:
+                        items:
+                          type: string
+                        type: array
+                    type: object
+                  hf_model_id:
+                    type: string
+                  max_total_tokens:
+                    type: integer
+                  model_id:
+                    type: string
+                  type:
+                    type: string
+                required:
+                - model_id
+                type: object
+              scaling_config:
+                description: ScalingConfig defines the resources assigned to each
+                  model replica. This corresponds to Ray AIR ScalingConfig.
+                properties:
+                  num_cpus_per_worker:
+                    type: integer
+                  num_gpus_per_worker:
+                    type: integer
+                  num_workers:
+                    type: integer
+                  placement_strategy:
+                    type: string
+                  resources_per_worker:
+                    type: object
+                type: object
+              template_name:
+                type: string
+            required:
+            - deployment_config
+            - engine_config
+            - scaling_config
+            - template_name
+            type: object
+          status:
+            properties:
+              conditions:
+                items:
+                  properties:
+                    lastTransitionTime:
+                      description: Last time the condition transitioned from one status
+                        to another.
+                      type: string
+                    lastUpdateTime:
+                      description: The last time this condition was updated.
+                      type: string
+                    message:
+                      description: Human-readable message indicating details about
+                        last transition
+                      type: string
+                    reason:
+                      description: The reason for the condition's last transition.
+                      type: string
+                    status:
+                      description: Status of the condition, one of True, False, Unknown.
+                      type: string
+                    type:
+                      description: Type of the condition.
+                      type: string
+                  required:
+                  - status
+                  - type
+                  type: object
+                type: array
+              version:
+                type: integer
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources: {}
