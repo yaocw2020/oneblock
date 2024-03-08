@@ -11,9 +11,9 @@ mkdir -p "${out_dir}"
 rm -rf "${out_dir}/*.yaml"
 
 # Generate CRD manifest YAMLs
-"${ROOT_DIR}"/bin/controller-gen crd \
+$ROOT_DIR/bin/controller-gen crd:allowDangerousTypes=true \
 	paths="${ROOT_DIR}/pkg/apis/..." \
-	output:crd:dir="${out_dir}"
+	output:crd:dir="${out_dir}" \
 
 # Remove controller-gen version info
 while read -r target_file; do

@@ -25,4 +25,7 @@ const (
 
 	AnnotationDefaultSchedulingKey             = "scheduling.oneblock.ai/isDefaultQueue"
 	AnnotationSchedulingSupportedNamespacesKey = "scheduling.oneblock.ai/supportedNamespaces"
+
+	// model constant
+	LabelModelTemplateName = mlPrefix + "modelTemplate"
 )
