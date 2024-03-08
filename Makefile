@@ -130,7 +130,7 @@ uninstall-ob: ## Undeploy api-server from the K8s cluster.
 
 .PHONY: run-apiserver
 run-apiserver: ## Undeploy api-server from the K8s cluster.
-	go run main.go api-server --kubeconfig="~/.kube/config.yaml"
+	go run main.go api-server
 
 ##@ Helm chart
 .PHONY: helm-dep-update
